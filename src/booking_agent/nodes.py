@@ -29,7 +29,7 @@ from mock_apis.room_services import (
     find_rooms_by_capacity_tool,
 )
 
-from booking_agent.schemas import AgentState, BookingRequest
+from booking_agent.schemas import AgentState, BookingRequest, RoomRequest
 
 ##==============================================================================
 # NODE FUNCTIONS
@@ -120,8 +120,9 @@ def find_matching_rooms(state: AgentState, llm) -> AgentState:
         #     equipments=equipments
         # )
         print(f"Existing rooms: {len(existing_rooms)}, Capacity: {capacity}, Equipments: {equipments}")
-        searchroom_prompt = apply_searchroom_prompt(existing_rooms, capacity, equipments)
-        chain = searchroom_prompt | llm
+        parser = PydanticOutputParser(pydantic_object=RoomRequest)
+        searchroom_prompt = apply_searchroom_prompt(parser, existing_rooms, capacity, equipments)
+        chain = searchroom_prompt | llm | parser
         # Invoke chain
         matching_rooms = chain.invoke({
             "existing_rooms": existing_rooms,

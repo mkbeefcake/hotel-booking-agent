@@ -134,6 +134,11 @@ ROOM_TEMPLATE = "\n".join([
 ])
 
 SEARCHROOM_TEMPLATE = "\n".join([
-    "Please find out the matched rooms based on the user's request. Extract the rooms from the request strictly as JSON.",
-    "Existing Rooms: {existing_rooms}, Required Capacity: {capacity}, Required Equipments: {equipments}",
+"Given the following information, please return only one JSON-formatted object containing the matched rooms:"
+"- Always respond ONLY with a JSON object matching this schema: {parsing_schema}.",
+"1. Existing Rooms: {existing_rooms}"
+"2. Required Capacity: {capacity}"
+"3. Required Equipments: {equipments}"
+"The JSON object should contain the following fields: `id`, `name`, `capacity`, and `equipments`."
+"Ensure the output is strictly in JSON format without any additional text or explanation."
 ])

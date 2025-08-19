@@ -31,6 +31,20 @@ class AgentState(TypedDict):
     booking_result: Optional[bool]     # Flag for confirmed booking
     error_message: Optional[str]       # Error details if booking fails
 
+class RoomRequest(BaseModel):
+    id: int
+    name: str
+    capacity: Optional[int] = Field(
+        None,
+        description="The number of people the room should accommodate (e.g., 5 for a room that fits 5 people)."\
+        " This must be greater than 0. set it null if not applicable."
+    )
+    equipments: Optional[List[str]] = Field(
+        default_factory=list,  # Default to an empty list if no value is provided
+        description="A list of equipment required for the booking (e.g., ['projector', 'whiteboard'])."\
+        "If user don't have specific equipments, write 'nothing'."
+    )
+
 class BookingRequest(BaseModel):
     start_date: Optional[str] = Field(
         None,

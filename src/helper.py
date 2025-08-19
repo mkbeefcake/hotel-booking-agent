@@ -71,13 +71,16 @@ def apply_request_prompt(parsing_schema: PydanticOutputParser) -> PromptTemplate
         })
     return prompt_template
 
-def apply_searchroom_prompt(existing_rooms: List[Dict], capacity, equipments) -> PromptTemplate:
+def apply_searchroom_prompt(parser: PydanticOutputParser, existing_rooms: List[Dict], capacity, equipments) -> PromptTemplate:
     """
     Apply the prompt template to search for matching rooms.
     """
     return PromptTemplate(
-        input_variables = ["existing_rooms", "capacity", "equipments"],
-        template = SEARCHROOM_TEMPLATE
+        input_variables = ["existing_rooms", "capacity", "equipments", "parser"],
+        template = SEARCHROOM_TEMPLATE,
+        partial_variables = {
+            "parsing_schema": parser.get_format_instructions()
+        }
     )
 
 def apply_rooms_prompt(rooms: List[Dict]) -> PromptTemplate:
