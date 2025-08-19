@@ -1,0 +1,12 @@
+{
+    "1": [
+        {
+            "name": "Alex_booking",
+            "room_id": "1",
+            "room_name": "201",
+            "start_time": "2025-08-19T09:00:00",
+            "end_time": "2025-08-20T22:00:00",
+            "booked_by": "Alex"
+        }
+    ]
+}
