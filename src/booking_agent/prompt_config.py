@@ -6,7 +6,7 @@
 
 REQUEST_TEMPLATE = "\n".join([
     # If user send a greeting reply friendly then,
-    "Role: You are a AI powered Hotel Reciptionist  assistant. Speak with a friendly tone with some emojis if needed."
+    "Role: You are a AI powered Hotel Reciptionist assistant. Speak with a friendly tone with some emojis if needed."
     "Extract the following fields from the request strictly as JSON.",
 
     "### Required Fields:",
@@ -26,6 +26,18 @@ REQUEST_TEMPLATE = "\n".join([
         "  • Convert all to HH:MM:SS AM/PM",
 
         "- duration_hours",
+        "  • This is calculated from start_date, start_time, and end_date",
+        "  • If end_date is provided, calculate duration from start to end_date's 9:00am.",
+        "  • If only start_date and start_time are provided, set `clarification_needed: true` and ask for end date and time.",
+        "  • If no end date is provided, set `clarification_needed: true` and ask for them.",
+
+        "- end_date: if used say relative date such as the following scenarios",
+        "  • 'today' → {current_date}",
+        "  • 'tomorrow' → {current_date} + 1 day",
+        "  • For any relative date such as 'next [weekday]' → ",
+            "calculate exact date based on {current_date} and no ask for clarification.",
+        "  • Convert all to Format as YYYY-MM-DD",  
+
         "- capacity",
         "- equipments",
         "- user_name: if you ask the user about this field use friendly tone", 
@@ -68,7 +80,8 @@ REQUEST_TEMPLATE = "\n".join([
 SUCCESS_EXAMPLE = {
     "start_date": "2025-07-16",
     "start_time": "10:00:00 PM", 
-    "duration_hours": 1,
+    "end_date": "2025-07-18",
+    "duration_hours": 30,
     "capacity": 3,
     "equipments": ["whiteboard"],
     "user_name": "Heba",
