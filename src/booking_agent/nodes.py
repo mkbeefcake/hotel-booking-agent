@@ -300,7 +300,8 @@ def confirm_booking(state: AgentState) -> AgentState:
     
     try:
         if not state.get("selected_room"):
-            raise ValueError("No room selected for booking")
+            available_rooms = state.get("available_rooms", [])
+            state["selected_room"] = available_rooms[0]
             
         booking_data = state["parsed_request"]
         room = state["selected_room"]
