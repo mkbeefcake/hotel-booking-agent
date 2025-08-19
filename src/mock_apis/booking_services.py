@@ -104,7 +104,7 @@ def book_room_tool(
         end_time=end_time,
         booked_by=user_name,
     )
-    room_bookings.append(new_booking)
+    room_bookings.append(new_booking.to_dict())
 
     print(f"Current bookings for room {room_id}: {room_bookings}")
     existing_bookings[room_id] = room_bookings

@@ -88,7 +88,7 @@ def ask_clarification(state: AgentState) -> AgentState:
         clarification_msg = state['parsed_request']['clarification_question']
         if not clarification_msg:
             logger.error(f"LLM didn't respond by clarification question")    
-            raise ValueError("No clarification question found in parsed request")
+            raise Exception("No clarification question found in parsed request")
     except Exception as e:
         logger.error(f"LLM didn't respond by clarification question: {str(e)}")
         missed_fields = get_missing_fields(state["parsed_request"])
