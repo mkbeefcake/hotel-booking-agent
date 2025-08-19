@@ -26,7 +26,8 @@ REQUEST_TEMPLATE = "\n".join([
         "  • Convert all to HH:MM:SS AM/PM",
 
         "- duration_hours",
-        "  • This is calculated from start_date's start_time to end_date's end_time.",
+        "  • Calculate the number of hours between start_date's start_time to end_date's end_time.",
+        "  Rules: (end_date - start_date) * 24 + (end_time - start_time) / 3600",
         "  • If only end_date is provided, calculate duration hours from start to end_date's 9:00am.",
         "  • If only start_date and start_time are provided, set `clarification_needed: true` and ask for end date and time.",
         "  • If no end date is provided, set `clarification_needed: true` and ask for them.",
