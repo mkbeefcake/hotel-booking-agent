@@ -33,7 +33,7 @@ def load_bookings(
             existing_data = json.load(f)
     except json.JSONDecodeError:
         print(f"Warning: Could not decode existing JSON in {filepath}. Starting fresh.")
-        existing_data = {}
+        existing_data = []
     return existing_data
 
 
@@ -65,15 +65,21 @@ def check_time_conflict_tool(
     start_time = datetime.fromisoformat(start_time)
     end_time = end_time or (start_time + timedelta(hours=duration_hours))
 
-    room_bookings = existing_bookings.get(room_id, [])
-    if not room_bookings:
+    try:
+        end_time = datetime.fromisoformat(end_time)
+
+        room_bookings = existing_bookings.get(room_id, [])
+        if not room_bookings:
+            return False
+        for booking in room_bookings:
+            booking_start = datetime.fromisoformat(booking['start_time'])
+            booking_end = datetime.fromisoformat(booking['end_time']) + DELAY
+            if start_time < booking_end and end_time > booking_start:
+                return True
         return False
-    for booking in room_bookings:
-        booking_start = datetime.fromisoformat(booking['start_time'])
-        booking_end = datetime.fromisoformat(booking['end_time']) + DELAY
-        if start_time < booking_end and end_time > booking_start:
-            return True
-    return False
+    
+    except Exception as e:
+        return False
 
 def get_room_reserved_time_slots(
         room_id: Union[int, str], 
