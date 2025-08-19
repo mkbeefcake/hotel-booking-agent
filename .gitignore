@@ -1,0 +1,10 @@
+__pycache__/
+
+draft/
+logs/
+.obsidian/
+.env
+
+
+environment.yml
+test.ipynb
