@@ -315,8 +315,8 @@ def confirm_booking(state: AgentState) -> AgentState:
         
         # Create the booking using the tool
         booking_result = book_room_tool(
-            room_id=room.id,
-            start_time=booking_data["start_time"],
+            room_id=int(room["id"]) if isinstance(room, dict) else room.id,
+            start_time=start_time.isoformat(),
             end_time=end_time.isoformat(),
             user_name=booking_data["user_name"]
         )
