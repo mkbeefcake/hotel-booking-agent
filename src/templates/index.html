@@ -26,7 +26,7 @@
         <div class="chat-body" id="chatWindow">
             <div class="message agent-message">
                 <div class="message-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/16869/16869849.png" alt="AI Icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6606/6606308.png" alt="AI Icon">
                 </div>
                 <div class="message-content">
                     👋🏻 My name is Mando! I'm an AI assistant. I can help you book meeting rooms. Tell me about your
@@ -38,7 +38,7 @@
             {% for msg in session.agent_state['messages'] %}
             <div class="message {% if msg.type == 'human' %}user-message{% else %}agent-message{% endif %}">
                 <div class="message-icon">
-                    <img src="{% if msg.type == 'human' %}https://cdn0.iconfinder.com/data/icons/user-interface-706/24/User_Icon-512.png{% else %}https://cdn-icons-png.flaticon.com/512/16869/16869849.png{% endif %}"
+                    <img src="{% if msg.type == 'human' %}https://cdn-icons-png.flaticon.com/512/1144/1144760.png{% else %}https://cdn-icons-png.flaticon.com/512/6606/6606308.png{% endif %}"
                         alt="icon">
                 </div>
                 <div class="message-content">
