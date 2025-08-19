@@ -40,7 +40,7 @@ REQUEST_TEMPLATE = "\n".join([
 
         "- capacity",
         "- equipments",
-        "- user_name: if you ask the user about this field use friendly tone", 
+        "- user_name: ask politely for the user's name if not provided, and set `clarification_needed: true` if missing.", 
     
     "### Instructions:",
         "- If the user says ONLY greeting, e.g., 'hi', 'hello', 'hey', 'good morning', etc., and no booking info:",
@@ -95,7 +95,7 @@ MISSING_EXAMPLE = {
     "duration_hours": None,
     "capacity": 4,
     "equipments": ["projector"],
-    "user_name": None,
+    "user_name": "",
     "clarification_needed": True,
     "clarification_question": "Could you confirm if you meant 10:00:00 AM or PM, and provide the date for the booking?"
 }
