@@ -87,13 +87,15 @@ def ask_clarification(state: AgentState) -> AgentState:
 
     try:
         clarification_msg = state['parsed_request']['clarification_question']
+        if not clarification_msg:
+            logger.error(f"LLM didn't respond by clarification question")    
+            raise ValueError("No clarification question found in parsed request")
     except Exception as e:
         logger.error(f"LLM didn't respond by clarification question: {str(e)}")
         missed_fields = get_missing_fields(state["parsed_request"])
         # Retrieve random question from predefined list
         msgs = load_clarification_msgs()
         clarification_msg = random.choice(msgs[missed_fields[0]])
-
     
     state["clarification_question"] = clarification_msg
     # state["clarification_needed"] = False
@@ -114,12 +116,12 @@ def find_matching_rooms(state: AgentState, llm) -> AgentState:
         capacity = state["parsed_request"]["capacity"]
         equipments = state["parsed_request"].get("equipments", [])
         
+        print(f"Existing rooms: {len(existing_rooms)}, Capacity: {capacity}, Equipments: {equipments}")
         matching_rooms = find_matching_rooms_tool(
             existing_rooms,
             capacity=capacity,
             equipments=equipments
         )
-        print(f"Existing rooms: {len(existing_rooms)}, Capacity: {capacity}, Equipments: {equipments}")
         # parser = PydanticOutputParser(pydantic_object=RoomRequest)
         # searchroom_prompt = apply_searchroom_prompt(parser, existing_rooms, capacity, equipments)
         # chain = searchroom_prompt | llm | parser

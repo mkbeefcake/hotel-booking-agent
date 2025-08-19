@@ -70,13 +70,15 @@ def create_workflow():
     # Edge: Find matching rooms -> Booking options or Alternative rooms
     workflow.add_conditional_edges(
         FIND_MATCHING_ROOMS,
-        lambda state: state.get("matching_rooms", False),        
+        lambda state: True if len(state.get("matching_rooms", [])) > 0 else False,
         {
             True: FIND_BOOKING_OPTIONS,
             False: SEARCH_ALTERNATIVE_ROOMS
-            # True: "test", # FIND_BOOKING_OPTIONS,
-            # False: END, # SEARCH_ALTERNATIVE_ROOMS
         }
+        # {
+        #     True: "test", # FIND_BOOKING_OPTIONS,
+        #     False: END, # SEARCH_ALTERNATIVE_ROOMS
+        # }
     )
 
     workflow.add_edge(HANDLE_ERROR, END)
