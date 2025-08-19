@@ -87,7 +87,7 @@ The Meeting Room Booking Agent leverages state-of-the-art language models to tra
 
 4. **Launch Application**
    ```bash
-   flask run
+   $env:PYTHONPATH = "./src"; flask run
    ```
 
    Access the application at `http://localhost:5000`
