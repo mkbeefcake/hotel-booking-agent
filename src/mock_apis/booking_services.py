@@ -114,8 +114,8 @@ def book_room_tool(
         with open(file_path, "w") as f:            
             json.dump(existing_bookings, f, indent=4)
         print(f"Bookings saved successfully to {file_path}")
-
+        return True
+    
     except Exception as e:
         print(f"Error saving bookings: {str(e)}")
-
-    return new_booking
+        return False

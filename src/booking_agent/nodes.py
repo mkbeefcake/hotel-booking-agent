@@ -319,10 +319,10 @@ def confirm_booking(state: AgentState) -> AgentState:
             user_name=booking_data["user_name"]
         )
         
-        state["booking_result"] = True if booking_result else False
+        state["booking_result"] = booking_result
         if booking_result:
             state["user_booking_confirmation"] = "yes"
-            state["llm_response"] = f"Successfully booked {room.name} for you!"
+            state["llm_response"] = f"Successfully booked {room['name']} for you!"
         else:
             raise ValueError("Booking creation failed")
             
