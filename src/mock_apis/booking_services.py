@@ -9,15 +9,16 @@ from typing import List, Optional, Union, Dict
 from config import BOOKINGS_FILE, DELAY
 
 class Booking:
-    def __init__(self, room_id, start_time, end_time, booked_by):
+    def __init__(self, room_id, room_name, start_time, end_time, booked_by):
         self.name = booked_by + "_booking"
         self.room_id = room_id
+        self.room_name = room_name
         self.start_time = start_time
         self.end_time = end_time
         self.booked_by = booked_by
 
     def __repr__(self):
-        return (f"Booking(room_id={self.room_id}, name={self.name}, "
+        return (f"Booking(room_id={self.room_id}, name={self.name}, room_name={self.room_name}, "
                 f"booked_by={self.booked_by}, start_time={self.start_time}, "
                 f"end_time={self.end_time}")
     
@@ -26,6 +27,7 @@ class Booking:
         return {
             "name": self.name,
             "room_id": self.room_id,
+            "room_name": self.room_name,
             "start_time": self.start_time.isoformat() if isinstance(self.start_time, datetime) else self.start_time,
             "end_time": self.end_time.isoformat() if isinstance(self.end_time, datetime) else self.end_time,
             "booked_by": self.booked_by
@@ -70,6 +72,8 @@ def check_time_conflict_tool(
         for booking in room_bookings:
             booking_start = datetime.fromisoformat(booking['start_time'])
             booking_end = datetime.fromisoformat(booking['end_time']) + DELAY
+            
+            print(f"Checking conflict: {booking_start} - {booking_end} with {start_time} - {end_time}")
             if start_time < booking_end and end_time > booking_start:
                 return True
         return False
@@ -89,7 +93,7 @@ def get_room_reserved_time_slots(
 
 # @tool("book_room", description="Book a room for the specified time and user.")
 def book_room_tool(
-        room_id: int, start_time: str, 
+        room_id: int, room_name: str, start_time: str, 
         end_time: str, user_name: str
     ) -> Optional[Booking]:
     """Book a room for the specified time and user."""
@@ -100,6 +104,7 @@ def book_room_tool(
     # create new booking
     new_booking = Booking(
         room_id=room_id,
+        room_name=room_name,
         start_time=start_time,
         end_time=end_time,
         booked_by=user_name,

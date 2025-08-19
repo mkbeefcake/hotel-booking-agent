@@ -16,16 +16,12 @@ from config import logger
 from mock_apis.booking_services import (
     load_bookings,
     check_time_conflict_tool,
-    get_room_reserved_time_slots,
     book_room_tool
 )
 from mock_apis.room_services import ( 
     load_rooms, 
     find_matching_rooms_tool, 
     find_similar_rooms_tool,
-    check_room_availability_equipment,
-    find_rooms_by_equipments_tool,
-    find_rooms_by_capacity_tool,
 )
 
 from booking_agent.schemas import AgentState, BookingRequest, RoomRequest
@@ -314,6 +310,7 @@ def confirm_booking(state: AgentState) -> AgentState:
         # Create the booking using the tool
         booking_result = book_room_tool(
             room_id=int(room["id"]) if isinstance(room, dict) else room.id,
+            room_name=room["name"],
             start_time=start_time.isoformat(),
             end_time=end_time.isoformat(),
             user_name=booking_data["user_name"]
@@ -343,7 +340,7 @@ def search_alternative_rooms(state: AgentState) -> AgentState:
     
     try:
         capacity = state["parsed_request"]["capacity"]
-        equipments = state["parsed_request"].get("equipments", [])
+        equipments = state["parsed_request"]["equipments"]
         
         # Find similar rooms using the similarity tool
         alternative_rooms = find_similar_rooms_tool(
@@ -356,7 +353,7 @@ def search_alternative_rooms(state: AgentState) -> AgentState:
         if alternative_rooms:
             logger.info(f" >>>>>>> FOUND {len(alternative_rooms)} ALTERNATIVE ROOMS")
             state["llm_response"] = "I found some alternative rooms that might work for you: \n" + \
-                "\n".join([f"- {room.name}: Capacity {room.capacity}, Equipment: {', '.join(room.equipments)}"
+                "\n".join([f"- {room['name']}: Capacity {room['capacity']}, Equipment: {', '.join(room['equipments'])}"
                           for room in alternative_rooms])
         else:
             logger.info(" >>>>>>> NO ALTERNATIVE ROOMS FOUND")

@@ -66,7 +66,7 @@ def find_similar_rooms_tool(capacity: int, equipments: list, top_n: int = 3) -> 
     scored_rooms = []
     for room in rooms:
         if room['capacity'] >= capacity:
-            overlap = len(set(room.equipments) & set(equipments))
+            overlap = len(set(room['equipments']) & set(equipments))
             scored_rooms.append((overlap, room))
     scored_rooms.sort(reverse=True, key=lambda x: x[0])
     return [room for overlap, room in scored_rooms if overlap > 0][:top_n]
@@ -76,7 +76,7 @@ def find_rooms_by_equipments_tool(equipments: List[str]) -> List[Room]:
     rooms = load_rooms()
     matching_rooms = []
     for room in rooms:
-        if all(feature in room.equipments for feature in equipments):
+        if all(feature in room['equipments'] for feature in equipments):
             matching_rooms.append(room)
     return matching_rooms
 
