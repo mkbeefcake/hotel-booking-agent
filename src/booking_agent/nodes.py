@@ -235,9 +235,9 @@ def select_room(state: AgentState) -> AgentState:
             selected = available_rooms[0]
             state["selected_room"] = selected
             state["llm_response"] = (
-                f"I've selected {selected.name} for you which has:\n"
-                f"- Capacity: {selected.capacity} people\n"
-                f"- Equipment: {', '.join(selected.equipments)}"
+                f"I've selected {selected['name']} for you which has:\n"
+                f"- Capacity: {selected['capacity']} people\n"
+                f"- Equipment: {', '.join(selected['equipments'])}"
             )
         else:
             state["selected_room"] = None
