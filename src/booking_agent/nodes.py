@@ -114,21 +114,21 @@ def find_matching_rooms(state: AgentState, llm) -> AgentState:
         capacity = state["parsed_request"]["capacity"]
         equipments = state["parsed_request"].get("equipments", [])
         
-        # matching_rooms = find_matching_rooms_tool(
-        #     existing_rooms,
-        #     capacity=capacity,
-        #     equipments=equipments
-        # )
+        matching_rooms = find_matching_rooms_tool(
+            existing_rooms,
+            capacity=capacity,
+            equipments=equipments
+        )
         print(f"Existing rooms: {len(existing_rooms)}, Capacity: {capacity}, Equipments: {equipments}")
-        parser = PydanticOutputParser(pydantic_object=RoomRequest)
-        searchroom_prompt = apply_searchroom_prompt(parser, existing_rooms, capacity, equipments)
-        chain = searchroom_prompt | llm | parser
-        # Invoke chain
-        matching_rooms = chain.invoke({
-            "existing_rooms": existing_rooms,
-            "capacity": capacity,
-            "equipments": equipments
-        }).content
+        # parser = PydanticOutputParser(pydantic_object=RoomRequest)
+        # searchroom_prompt = apply_searchroom_prompt(parser, existing_rooms, capacity, equipments)
+        # chain = searchroom_prompt | llm | parser
+        # # Invoke chain
+        # matching_rooms = chain.invoke({
+        #     "existing_rooms": existing_rooms,
+        #     "capacity": capacity,
+        #     "equipments": equipments
+        # }).content
         
         print(f"Matching rooms: {matching_rooms}")
         state["matching_rooms"] = matching_rooms
