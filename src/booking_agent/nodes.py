@@ -15,7 +15,6 @@ from helper import *
 from config import logger
 from mock_apis.booking_services import (
     load_bookings,
-    save_bookings_tool,
     check_time_conflict_tool,
     get_room_reserved_time_slots,
     book_room_tool

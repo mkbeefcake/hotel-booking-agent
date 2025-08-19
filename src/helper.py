@@ -47,7 +47,6 @@ def initialize_llm(name: str, temp: float=0.0):
         raise ValueError(f"Unsupported LLM: {name}")
     
     # llm.bind_tools([
-    #     save_bookings_tool,
     #     check_time_conflict_tool,
     #     # book_room_tool,
     #     find_matching_rooms_tool,
