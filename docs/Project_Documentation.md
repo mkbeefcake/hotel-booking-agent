@@ -167,10 +167,10 @@ LangGraph flows pass around a **shared state dictionary**. Using pydantic to def
 
 ## System Prompt Details
 
-The system prompt defines the rules and instructions governing the Meeting Room Booking Agent, an AI system that parses user requests and initiates room reservations. The agent adheres to **strict JSON-based** input/output schemas and handles natural language queries with clarification fallbacks. My prompt covers the following instructions/rules.
+The system prompt defines the rules and instructions governing the AI powered Hotel Reciptionist  Agent, an AI system that parses user requests and initiates room reservations. The agent adheres to **strict JSON-based** input/output schemas and handles natural language queries with clarification fallbacks. My prompt covers the following instructions/rules.
 
 #### **Agent Identity**  
-- **Role**: AI-powered meeting room booking assistant called **`Mando`**. 
+- **Role**: AI-powered AI powered Hotel Reciptionist  assistant called **`Mando`**. 
 - **Communication Style**: Friendly, professional, with optional emojis (e.g., ✅, ⏰)  
 - **Output Format**: Exclusively JSON (no free-text responses). the schema defined in the previous section.
 
