@@ -132,7 +132,7 @@ def find_matching_rooms(state: AgentState, llm) -> AgentState:
         #     "equipments": equipments
         # }).content
         
-        print(f"Matching rooms: {matching_rooms}")
+        print(f"Matching rooms: {len(matching_rooms)}")
         state["matching_rooms"] = matching_rooms
         # Ask LLM to make this in summerized response
         conversation_context = "\n".join(
@@ -168,10 +168,18 @@ def find_booking_options(state: AgentState) -> AgentState:
     
     try:
         existing_bookings = load_bookings()
+        print(f"Existing bookings: {existing_bookings}")
+
         for room in state["matching_rooms"]:
             # Check if room is available in the given time slot
+            print(f"Each room: {room}, "
+                  f"start_date: {state['parsed_request']['start_date']}, start_time: {state['parsed_request']['start_time']},"
+                  f"duration: {state['parsed_request']['duration_hours']}")
+            
             if check_time_conflict_tool(
-                existing_bookings=existing_bookings, room_id=room.id,
+                existing_bookings=existing_bookings, 
+                room_id= int(room["id"]) if isinstance(room, dict) else room.id,
+                start_date=state["parsed_request"]["start_date"],
                 start_time=state["parsed_request"]["start_time"],
                 duration_hours=state["parsed_request"]["duration_hours"]
             ):
@@ -179,8 +187,8 @@ def find_booking_options(state: AgentState) -> AgentState:
             else:
                 available_rooms.append(room)
 
-        logger.info(" >>>>>>> AVAILABLE ROOMS: %s",
-                   "NO AVAILABLE ROOMS" if not available_rooms else available_rooms)
+        logger.info(f" >>>>>>> AVAILABLE ROOMS: {'No rooms' if not available_rooms else available_rooms}, "
+                    f" >>>>>>> NO AVAILABLE ROOMS: {'No rooms' if not unavailable_rooms else unavailable_rooms}")
         
         state["available_rooms"] = available_rooms
         state["unavailable_rooms"] = unavailable_rooms
@@ -190,9 +198,9 @@ def find_booking_options(state: AgentState) -> AgentState:
         state["error_message"] = f"Failed to check room availability: {str(e)}"
         state["available_rooms"] = []
         state["unavailable_rooms"] = []
+        logger.info(" >>>>>>> UNAVAILABLE ROOMS:", state.get("un_available_rooms", "NO UNAVAILABLE ROOMS"))
+        logger.info(" >>>>>>> AVAILABLE ROOMS:", state.get("available_rooms", "NO FREE AVAILABLE ROOMS"))
 
-    logger.info(" >>>>>>> UNAVAILABLE ROOMS:", state.get("un_available_rooms", "NO UNAVAILABLE ROOMS"))
-    logger.info(" >>>>>>> AVAILABLE ROOMS:", state.get("available_rooms", "NO FREE AVAILABLE ROOMS"))
     return state
 
 

@@ -33,7 +33,7 @@ def load_bookings(
             existing_data = json.load(f)
     except json.JSONDecodeError:
         print(f"Warning: Could not decode existing JSON in {filepath}. Starting fresh.")
-        existing_data = []
+        existing_data = {}
     return existing_data
 
 
@@ -56,17 +56,20 @@ def save_bookings_tool(
 # @tool("check_time_conflict", description="Check if a room has a time conflict for the requested time.")
 def check_time_conflict_tool(
         existing_bookings: List[Dict[str, Union[str, datetime]]],
-        room_id: int, start_time:  Union[str, datetime],
-        end_time: Optional[Union[str, datetime]] = None, duration_hours: Optional[float]=None,
+        room_id: int, 
+        start_date: Union[str, datetime], 
+        start_time: Union[str, datetime], 
+        duration_hours: Optional[float]=None,
     ) -> bool:
     """ 
     Check if a room has a time conflict for the requested time. 
     """
-    start_time = datetime.fromisoformat(start_time)
-    end_time = end_time or (start_time + timedelta(hours=duration_hours))
-
     try:
-        end_time = datetime.fromisoformat(end_time)
+        start_date = datetime.fromisoformat(start_date) if isinstance(start_date, str) else start_date
+        start_time = datetime.strptime(start_time, '%I:%M:%S %p') if isinstance(start_time, str) else start_time
+        start_time = start_date.replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0)
+
+        end_time = start_time + timedelta(hours=duration_hours)
 
         room_bookings = existing_bookings.get(room_id, [])
         if not room_bookings:
@@ -79,6 +82,7 @@ def check_time_conflict_tool(
         return False
     
     except Exception as e:
+        print(f"Error check_time_conflict_tool: {str(e)}")
         return False
 
 def get_room_reserved_time_slots(
