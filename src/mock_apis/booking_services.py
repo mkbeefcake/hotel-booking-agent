@@ -8,6 +8,19 @@ from langchain_core.tools import tool
 
 from config import BOOKINGS_FILE, DELAY
 
+class Booking:
+    def __init__(self, room_id, start_time, end_time, booked_by, purpose, attendees):
+        self.room_id = room_id
+        self.start_time = start_time
+        self.end_time = end_time
+        self.booked_by = booked_by
+        self.purpose = purpose
+        self.attendees = attendees
+
+    def __repr__(self):
+        return (f"Booking(booking_id={self.booking_id}, room_id={self.room_id}, "
+                f"user_id={self.user_id}, start_time={self.start_time}, "
+                f"end_time={self.end_time}, status={self.status})")
 
 # @tool("load_bookings", description="Load existing bookings from external file.")
 def load_bookings(
@@ -70,7 +83,6 @@ def get_room_reserved_time_slots(
     room_id = str(room_id)
     
     return free_time_slots
-
 
 @tool("book_room", description="Book a room for the specified time and user.")
 def book_room_tool(

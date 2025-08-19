@@ -34,6 +34,7 @@ def create_workflow():
     #########################################################################
     workflow = StateGraph(AgentState)
     llm = initialize_llm(name="groq", temp=TEMPERATURE)
+    # llm = initialize_llm(name="gemini", temp=TEMPERATURE)
     # workflow.set_state(AgentState.INITIAL)
     # workflow.set_transition_logger(lambda from_node, to_node: print(f"Transition: {from_node} -> {to_node}"))
 
@@ -45,7 +46,7 @@ def create_workflow():
     workflow.add_node(ASK_CLARIFICATION, ask_clarification)
     workflow.add_node(HANDLE_ERROR, handle_error)
     workflow.add_node(FIND_MATCHING_ROOMS, lambda state: find_matching_rooms(state, llm))
-    workflow.add_node("test", lambda state: "All is good")
+    # workflow.add_node("test", lambda state: "All is good")
     workflow.add_node(FIND_BOOKING_OPTIONS, find_booking_options)
     workflow.add_node(SEARCH_ALTERNATIVE_ROOMS, search_alternative_rooms)
     workflow.add_node(CHOOSE_ALTERNATIVE_ROOMS, select_room)
@@ -71,13 +72,15 @@ def create_workflow():
         FIND_MATCHING_ROOMS,
         lambda state: state.get("matching_rooms", False),        
         {
-            True: "test", # FIND_BOOKING_OPTIONS,
-            False: END, # SEARCH_ALTERNATIVE_ROOMS
+            True: FIND_BOOKING_OPTIONS,
+            False: SEARCH_ALTERNATIVE_ROOMS
+            # True: "test", # FIND_BOOKING_OPTIONS,
+            # False: END, # SEARCH_ALTERNATIVE_ROOMS
         }
     )
 
     workflow.add_edge(HANDLE_ERROR, END)
-    workflow.add_edge("test", END)
+    # workflow.add_edge("test", END)
     #########################################################################
     # SET ENTRY POINT
     #########################################################################

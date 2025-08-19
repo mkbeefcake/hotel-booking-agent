@@ -1,10 +1,27 @@
 # src/mock_apis/room_services.py
+
 import json
 from pathlib import Path
 from typing import List, Dict
 from config import ROOMS_FILE
 from helper import *
 # from langchain_core.tools import tool
+
+# Room class definition
+class Room:
+    def __init__(self, id, name, capacity, equipments, location, amenities):
+        self.id = id
+        self.name = name
+        self.capacity = capacity
+        self.equipments = equipments  # List[str]
+        self.location = location
+        self.amenities = amenities # List[str]
+
+    def __repr__(self):
+        return (f"Room(room_id={self.room_id}, name={self.name}, "
+                f"capacity={self.capacity}, equipments={self.equipments}), "
+                f"location={self.location}, amenities={self.amenities}")
+
 
 def check_room_availability_equipment(room: Dict, equipments: List[str]) -> bool:
     """
