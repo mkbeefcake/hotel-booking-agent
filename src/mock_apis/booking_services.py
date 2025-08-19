@@ -10,13 +10,14 @@ from config import BOOKINGS_FILE, DELAY
 
 class Booking:
     def __init__(self, room_id, start_time, end_time, booked_by):
+        self.name = booked_by + "_booking"
         self.room_id = room_id
         self.start_time = start_time
         self.end_time = end_time
         self.booked_by = booked_by
 
     def __repr__(self):
-        return (f"Booking(room_id={self.room_id}, "
+        return (f"Booking(room_id={self.room_id}, name={self.name}, "
                 f"booked_by={self.booked_by}, start_time={self.start_time}, "
                 f"end_time={self.end_time}")
 

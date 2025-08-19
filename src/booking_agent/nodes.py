@@ -309,8 +309,7 @@ def confirm_booking(state: AgentState) -> AgentState:
         start_time = datetime.strptime(booking_data["start_time"], '%I:%M:%S %p')
         start_time = start_date.replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0)
 
-        end_time = start_time + \
-                   timedelta(hours=booking_data["duration_hours"])
+        end_time = start_time + timedelta(hours=booking_data["duration_hours"])
         
         # Create the booking using the tool
         booking_result = book_room_tool(
