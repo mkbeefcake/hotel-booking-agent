@@ -172,9 +172,9 @@ def find_booking_options(state: AgentState) -> AgentState:
 
         for room in state["matching_rooms"]:
             # Check if room is available in the given time slot
-            print(f"Each room: {room}, "
-                  f"start_date: {state['parsed_request']['start_date']}, start_time: {state['parsed_request']['start_time']},"
-                  f"duration: {state['parsed_request']['duration_hours']}")
+            # print(f"Each room: {room}, "
+            #       f"start_date: {state['parsed_request']['start_date']}, start_time: {state['parsed_request']['start_time']},"
+            #       f"duration: {state['parsed_request']['duration_hours']}")
             
             if check_time_conflict_tool(
                 existing_bookings=existing_bookings, 
@@ -306,7 +306,11 @@ def confirm_booking(state: AgentState) -> AgentState:
         booking_data = state["parsed_request"]
         room = state["selected_room"]
         
-        end_time = datetime.fromisoformat(booking_data["start_time"]) + \
+        start_date = datetime.fromisoformat(booking_data["start_date"])
+        start_time = datetime.strptime(booking_data["start_time"], '%I:%M:%S %p')
+        start_time = start_date.replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0)
+
+        end_time = start_time + \
                    timedelta(hours=booking_data["duration_hours"])
         
         # Create the booking using the tool
