@@ -43,15 +43,21 @@ def save_bookings_tool(
         booking: Dict, file_path: Path = BOOKINGS_FILE
     ):
     """Save bookings to the database."""
-    bookings = load_bookings(file_path=file_path)
-    room_id = str(room_id)
-    room_bookings = bookings.get(room_id, [])
-    print(f"Current bookings for room {room_id}: {room_bookings}")
-    room_bookings.append(booking)
-    bookings[room_id] = room_bookings
+    try:
+        bookings = load_bookings(file_path=file_path)
+        room_id = str(room_id)
+        room_bookings = bookings.get(room_id, [])
+        print(f"Current bookings for room {room_id}: {room_bookings}")
+        room_bookings.append(booking)
+        bookings[room_id] = room_bookings
 
-    with open(file_path, "w") as f:
-        json.dump(bookings, f, indent=4)
+        with open(file_path, "w") as f:            
+            json.dump(bookings, f, indent=4)
+        
+        print(f"Bookings saved successfully to {file_path}")
+    except Exception as e:
+        print(f"Error saving bookings: {str(e)}")
+        return
 
 # @tool("check_time_conflict", description="Check if a room has a time conflict for the requested time.")
 def check_time_conflict_tool(
@@ -101,10 +107,12 @@ def book_room_tool(
     ) -> Optional[Booking]:
     """Book a room for the specified time and user."""
     existing_bookings = load_bookings()
-    if check_time_conflict_tool(
-        room_id, start_time, duration_hours=int((datetime.fromisoformat(end_time) - datetime.fromisoformat(start_time)).total_seconds() / 3600)
-    ):
-        return None
+    # if check_time_conflict_tool(
+    #     room_id, 
+    #     start_time, 
+    #     duration_hours=int((datetime.fromisoformat(end_time) - datetime.fromisoformat(start_time)).total_seconds() / 3600)
+    # ):
+    #     return None
     booking = Booking(
         room_id=room_id,
         start_time=start_time,
