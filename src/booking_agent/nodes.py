@@ -7,11 +7,28 @@ from langgraph.graph import END
 from langchain.output_parsers import PydanticOutputParser
 from langchain_core.messages import HumanMessage, SystemMessage
 from datetime import datetime, timedelta
+from config import ROOMS_FILE
+from pathlib import Path
 
+from langchain.tools import BaseTool
 from helper import *
 from config import logger
-from mock_apis.booking_services import *
-from mock_apis.room_services import *
+from mock_apis.booking_services import (
+    load_bookings,
+    save_bookings_tool,
+    check_time_conflict_tool,
+    get_room_reserved_time_slots,
+    book_room_tool
+)
+from mock_apis.room_services import ( 
+    load_rooms, 
+    find_matching_rooms_tool, 
+    find_similar_rooms_tool,
+    check_room_availability_equipment,
+    find_rooms_by_equipments_tool,
+    find_rooms_by_capacity_tool,
+)
+
 from booking_agent.schemas import AgentState, BookingRequest
 
 ##==============================================================================
@@ -97,12 +114,22 @@ def find_matching_rooms(state: AgentState, llm) -> AgentState:
         capacity = state["parsed_request"]["capacity"]
         equipments = state["parsed_request"].get("equipments", [])
         
-        matching_rooms = find_matching_rooms_tool(
-            existing_rooms,
-            capacity=capacity,
-            equipments=equipments
-        )
+        # matching_rooms = find_matching_rooms_tool(
+        #     existing_rooms,
+        #     capacity=capacity,
+        #     equipments=equipments
+        # )
+        print(f"Existing rooms: {len(existing_rooms)}, Capacity: {capacity}, Equipments: {equipments}")
+        searchroom_prompt = apply_searchroom_prompt(existing_rooms, capacity, equipments)
+        chain = searchroom_prompt | llm
+        # Invoke chain
+        matching_rooms = chain.invoke({
+            "existing_rooms": existing_rooms,
+            "capacity": capacity,
+            "equipments": equipments
+        }).content
         
+        print(f"Matching rooms: {matching_rooms}")
         state["matching_rooms"] = matching_rooms
         # Ask LLM to make this in summerized response
         conversation_context = "\n".join(

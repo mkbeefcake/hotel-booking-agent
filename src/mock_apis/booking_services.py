@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Optional, Union, Dict
 
-from langchain_core.tools import tool
+# from langchain_core.tools import tool
 
 from config import BOOKINGS_FILE, DELAY
 
@@ -84,7 +84,7 @@ def get_room_reserved_time_slots(
     
     return free_time_slots
 
-@tool("book_room", description="Book a room for the specified time and user.")
+# @tool("book_room", description="Book a room for the specified time and user.")
 def book_room_tool(
         room_id: int, start_time: str, 
         end_time: str, user_name: str

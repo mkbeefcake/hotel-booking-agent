@@ -132,3 +132,8 @@ ROOM_TEMPLATE = "\n".join([
     "Please politely inform the user by the rooms info your friendly style."
     "Here are the available rooms: {rooms}",
 ])
+
+SEARCHROOM_TEMPLATE = "\n".join([
+    "Please find out the matched rooms based on the user's request. Extract the rooms from the request strictly as JSON.",
+    "Existing Rooms: {existing_rooms}, Required Capacity: {capacity}, Required Equipments: {equipments}",
+])

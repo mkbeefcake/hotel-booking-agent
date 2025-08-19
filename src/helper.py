@@ -71,6 +71,15 @@ def apply_request_prompt(parsing_schema: PydanticOutputParser) -> PromptTemplate
         })
     return prompt_template
 
+def apply_searchroom_prompt(existing_rooms: List[Dict], capacity, equipments) -> PromptTemplate:
+    """
+    Apply the prompt template to search for matching rooms.
+    """
+    return PromptTemplate(
+        input_variables = ["existing_rooms", "capacity", "equipments"],
+        template = SEARCHROOM_TEMPLATE
+    )
+
 def apply_rooms_prompt(rooms: List[Dict]) -> PromptTemplate:
     """
     Generate a user-friendly message listing available rooms.
@@ -127,18 +136,18 @@ def load_clarification_msgs(filepath:str = MSG_JSON_FILE) -> Dict:
 
 
 
-# def format_available_times_msg(available_times: dict) -> str:
-#     """
-#     Generate a user-friendly message listing available times for matching rooms.
-#     """
-#     if not available_times:
-#         return "No available times found for the matching rooms."
+def format_available_times_msg(available_times: dict) -> str:
+    """
+    Generate a user-friendly message listing available times for matching rooms.
+    """
+    if not available_times:
+        return "No available times found for the matching rooms."
 
-#     messages = [
-#         f"Room '{room}' NOT available at the following times: {', '.join(times)}"
-#         for room, times in available_times.items()
-#     ]
-#     return "Here are the available times for the matching rooms:\n" + "\n".join(messages)
+    messages = [
+        f"Room '{room}' NOT available at the following times: {', '.join(times)}"
+        for room, times in available_times.items()
+    ]
+    return "Here are the available times for the matching rooms:\n" + "\n".join(messages)
 
 #### Deprecated: Let LLM handle the clarifications ####
 # def get_clarification_question(state: AgentState) -> str:

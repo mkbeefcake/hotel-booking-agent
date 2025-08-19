@@ -9,18 +9,17 @@ from helper import *
 
 # Room class definition
 class Room:
-    def __init__(self, id, name, capacity, equipments, location, amenities):
+    def __init__(self, id, name, capacity, equipments):
         self.id = id
         self.name = name
         self.capacity = capacity
         self.equipments = equipments  # List[str]
-        self.location = location
-        self.amenities = amenities # List[str]
+        # self.location = location
+        # self.amenities = amenities # List[str]
 
     def __repr__(self):
         return (f"Room(room_id={self.room_id}, name={self.name}, "
-                f"capacity={self.capacity}, equipments={self.equipments}), "
-                f"location={self.location}, amenities={self.amenities}")
+                f"capacity={self.capacity}, equipments={self.equipments}), ")
 
 
 def check_room_availability_equipment(room: Dict, equipments: List[str]) -> bool:
@@ -41,6 +40,7 @@ def load_rooms(filepath: Path = ROOMS_FILE) -> List[Dict]:
     """
     existing_data: List[Dict] = [{}]
     try:
+        print(f"Room file path: {filepath}")
         with open(filepath, "r") as f:
             existing_data = json.load(f)
     except json.JSONDecodeError:
@@ -60,7 +60,7 @@ def find_matching_rooms_tool(existing_rooms: List[Dict], capacity: int, equipmen
             matching_rooms.append(room)
     return matching_rooms
 
-@tool("find_similar_rooms", description="Find rooms with similar equipment and capacity.")
+# @tool("find_similar_rooms", description="Find rooms with similar equipment and capacity.")
 def find_similar_rooms_tool(capacity: int, equipments: list, top_n: int = 3) -> List[Dict]:
     rooms = load_rooms()
     scored_rooms = []
@@ -71,7 +71,7 @@ def find_similar_rooms_tool(capacity: int, equipments: list, top_n: int = 3) -> 
     scored_rooms.sort(reverse=True, key=lambda x: x[0])
     return [room for overlap, room in scored_rooms if overlap > 0][:top_n]
 
-@tool("find_rooms_by_equipments", description="Find rooms that have all the specified equipment.")
+# @tool("find_rooms_by_equipments", description="Find rooms that have all the specified equipment.")
 def find_rooms_by_equipments_tool(equipments: List[str]) -> List[Room]:
     rooms = load_rooms()
     matching_rooms = []
@@ -80,7 +80,7 @@ def find_rooms_by_equipments_tool(equipments: List[str]) -> List[Room]:
             matching_rooms.append(room)
     return matching_rooms
 
-@tool("find_rooms_by_capacity", description="Find rooms that have a capacity greater than or equal to the specified value.")
+# @tool("find_rooms_by_capacity", description="Find rooms that have a capacity greater than or equal to the specified value.")
 def find_rooms_by_capacity_tool(capacity: int) -> List[Room]:
     rooms = load_rooms()
     matching_rooms = []
